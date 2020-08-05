@@ -19,7 +19,19 @@ async def on_message(message):
         f_blackwords = f_blacklist.readlines()
         f_blacklist.close()
         for f_blackword in f_blackwords:
-            if f_blackword[:-1] in message.content:
+            f_black_out = 0
+            f_black_st = 0
+            f_black_st2 = 0
+            rf_blackword = f_blackword[:-1]
+            lenth = len(rf_blackword)
+            for i in range(lenth):
+                if rf_blackword[i] in message.content[4:]:
+                    f_black_st2 = message.content[4:].index(rf_blackword[i])
+                    if f_black_st <= f_black_st2:
+                        f_black_st = f_black_st2
+                        f_black_out += 1
+
+            if f_black_out == lenth:
                 f_black = 1
             
         if f_black == 1:
@@ -53,8 +65,22 @@ async def on_message(message):
             blackwords = blacklist.readlines()
             blacklist.close()
             for blackword in blackwords:
-                if blackword[:-1] in message.content:
+                black_out = 0
+                black_st = 0
+                black_st2 = 0
+                r_blackword = blackword[:-1]
+                lenth = len(r_blackword)
+                for i in range(lenth):
+                    if r_blackword[i] in message_:
+                        black_st2 = message_.index(r_blackword[i])
+                        if black_st <= black_st2:
+                            black_st = black_st2
+                            black_out += 1
+                
+                if black_out == lenth:
                     black = 1
+
+
             if black == 0:
                 await message.channel.send(message_)
             else:
