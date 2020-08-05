@@ -15,7 +15,7 @@ async def on_message(message):
 
     if "시현아" in message.content:
         f_black = 0
-        f_blacklist = open("/home/pi/DiscordBot-sihyun_m00n/blacklist.txt", 'r')
+        f_blacklist = open("/home/root/Bot/blacklist.txt", 'r')
         f_blackwords = f_blacklist.readlines()
         f_blacklist.close()
         for f_blackword in f_blackwords:
@@ -61,7 +61,7 @@ async def on_message(message):
             for message__ in inpuT[st:i]:
                 message_ = message_ + message__ + " "
 
-            blacklist = open("/home/pi/DiscordBot-sihyun_m00n/blacklist.txt", 'r')
+            blacklist = open("/home/root/Bot/blacklist.txt", 'r')
             blackwords = blacklist.readlines()
             blacklist.close()
             for blackword in blackwords:
