@@ -15,7 +15,7 @@ async def on_message(message):
 
     if "시현아" in message.content:
         f_black = 0
-        f_blacklist = open("/home/root/Bot/blacklist.txt", 'r')
+        f_blacklist = open("/root/Bot/blacklist.txt", 'r')
         f_blackwords = f_blacklist.readlines()
         f_blacklist.close()
         for f_blackword in f_blackwords:
@@ -61,7 +61,7 @@ async def on_message(message):
             for message__ in inpuT[st:i]:
                 message_ = message_ + message__ + " "
 
-            blacklist = open("/home/root/Bot/blacklist.txt", 'r')
+            blacklist = open("/root/Bot/blacklist.txt", 'r')
             blackwords = blacklist.readlines()
             blacklist.close()
             for blackword in blackwords:
@@ -89,14 +89,17 @@ async def on_message(message):
             
 
         if "라고 말하면 안돼" in message.content or "라고 하면 안돼" in message.content:
-            inpuT = message.content.split()
-            i = inpuT.index("안돼")
-            i = i - 3
-            blackword = inpuT[i]
-            with open("/home/pi/DiscordBot-sihyun_m00n/blacklist.txt", 'a') as blacklist:
-                blacklist.write(blackword + "\n")
-            await message.channel.send('알았어')
-        
+            if message.author.id == 536932662972252170:
+                inpuT = message.content.split()
+                i = inpuT.index("안돼")
+                i = i - 3
+                blackword = inpuT[i]
+                with open("/root/Bot/blacklist.txt", 'a') as blacklist:
+                    blacklist.write(blackword + "\n")
+                await message.channel.send('알았어')
+            else:
+                await message.channel.send('시룬데><')
+
         if "심심" in message.content:
             if "?" in message.content:
                 await message.channel.send('딱히? ')
@@ -150,7 +153,7 @@ async def on_message(message):
                 i = i + 2
                 number2 = inpuT[i]
                 result = float(number1) * float(number2)
-                await message.content.send(str(result))
+                await message.channel.send(str(result))
             except:
                 await message.channel.send('뭐라는겨')
 
