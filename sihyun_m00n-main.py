@@ -14,6 +14,18 @@ async def on_message(message):
         await message.channel.send('왜')
 
     if "시현아" in message.content:
+        f_black = 0
+        f_blacklist = open("/home/pi/DiscordBot-sihyun_m00n/blacklist.txt", 'r')
+        f_blackwords = f_blacklist.readlines()
+        f_blacklist.close()
+        for f_blackword in f_blackwords:
+            if f_blackword[:-1] in message.content:
+                f_black = 1
+            
+        if f_black == 1:
+            await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/fuckyou.jpg'))
+            f_black = 0
+
         if "안녕" in message.content or "하이" in message.content:
             await message.channel.send('안녕?')
         
@@ -25,10 +37,6 @@ async def on_message(message):
                     await message.channel.send('잘지낸다니 다행이네')
                 else:
                     await message.channel.send('어디가?')
-        
-        if "게이야" in message.content or "게이지" in message.content:
-            await message.channel.send('ㅇㅇㄴㅇ')
-
         
         if "라고 말해봐" in message.content:
             black = 0
@@ -43,14 +51,15 @@ async def on_message(message):
 
             blacklist = open("/home/pi/DiscordBot-sihyun_m00n/blacklist.txt", 'r')
             blackwords = blacklist.readlines()
+            blacklist.close()
             for blackword in blackwords:
-                real_blackword = blackword[:-2]
-                if real_blackword in message.content:
+                if blackword[:-1] in message.content:
                     black = 1
             if black == 0:
                 await message.channel.send(message_)
             else:
                 await message.channel.send('ㅇㅇㄴㅇ')
+                black = 0
             
 
         if "라고 말하면 안돼" in message.content or "라고 하면 안돼" in message.content:
