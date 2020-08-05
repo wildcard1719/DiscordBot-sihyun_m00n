@@ -29,6 +29,7 @@ async def on_message(message):
         if "게이야" in message.content or "게이지" in message.content:
             await message.channel.send('ㅇㅇㄴㅇ')
 
+        
         if "라고 말해봐" in message.content:
             black = 0
             message_ = ""
@@ -38,7 +39,8 @@ async def on_message(message):
             i = i - 1
             st = st + 1
             for message__ in inpuT[st:i]:
-                message_ = message_ + message__
+                message_ = message_ + message__ + " "
+
             blacklist = open("/home/pi/DiscordBot-sihyun_m00n/blacklist.txt", 'r')
             blackwords = blacklist.readlines()
             for blackword in blackwords:
