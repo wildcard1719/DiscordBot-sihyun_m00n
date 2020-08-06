@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 import discord
 import time
+import fileinput
+import sys
 
 client = discord.Client()
+
+def replace_line(file_name, line_num, text):
+    lines = open(file_name,'r').readlines()
+    lines[line_num] = text
+    out = open(file_name, 'w')
+    out.writelines(lines)
+    out.close()
 
 @client.event
 async def on_ready():
@@ -16,7 +25,22 @@ async def on_message(message):
         await message.channel.send('왜')
 
     if "시현아" in message.content:
+        white = 0
         black = 0
+        user_in_list = 0
+        userlist = open("/root/Bot/userlist.txt", 'r')
+        user_infos = userlist.readlines()
+        userlist.close()
+        for user_info in user_infos:
+            user_info = user_info[:-1]
+            if str(message.author.id) in user_info:
+                user_in_list = 1
+        if user_in_list == 1:
+            pass
+        else:                
+            with open("/root/Bot/userlist.txt", 'a') as userlist:
+                userlist.write(str(message.author.id) + " 50\n")
+        
         blacklist = open("/root/Bot/blacklist.txt", 'r')
         blackwords = blacklist.readlines()
         blacklist.close()
@@ -31,16 +55,52 @@ async def on_message(message):
                     if black_st <= black_st2:
                         black_st = black_st2
                         black_out += 1
-
             if black_out == len(blackword):
                 black = 1
+
+        whitelist = open("/root/Bot/whitelist.txt", 'r')
+        whitewords = whitelist.readlines()
+        whitelist.close()
+        for whiteword in whitewords:
+            white_out = 0
+            white_st = 0
+            white_st2 = 0
+            whiteword = whiteword[:-1]
+            for whitechar in whiteword:
+                if blackchar in message.content[4:]:
+                    white_st2 = message.content[4:].index(whitechar)
+                    if white_st <= white_st2:
+                        white_st = white_st2
+                        white_out += 1
+            if white_out == len(whiteword):
+                white = 1
             
         if black == 1:
-            await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/fuckyou.jpg'))
-            await message.channel.send(message.author.id)
-            black = 0
+            userlist = open("/root/Bot/userlist.txt", 'r')
+            user_infos = userlist.readlines()
+            userlist.close()
+            for user_info in user_infos:
+                user_info = user_info[:-1]
+                if str(message.author.id) in user_info:
+                    this_info = user_info
+                    this_id = user_info.split()[0]
+                    this_int = user_info.split()[1]
+                    edit_line = this_id + " " + str(int(this_int) - 10) + "\n"
+                    replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
+        
+        elif white == 1:
+            userlist = open("/root/Bot/userlist.txt", 'r')
+            user_infos = userlist.readlines()
+            userlist.close()
+            for user_info in user_infos:
+                user_info = user_info[:-1]
+                if str(message.author.id) in user_info:
+                    this_info = user_info
+                    this_id = user_info.split()[0]
+                    this_int = user_info.split()[1]
+                    edit_line = this_id + " " + str(int(this_int) + 1) + "\n"
+                    replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
 
-   
         if "라고 말해봐" in message.content:
             black = 0
             message_ = ""
@@ -81,13 +141,24 @@ async def on_message(message):
 
             if "라고 말하면 안돼" in message.content or "라고 하면 안돼" in message.content:
                 if message.author.id == 536932662972252170:
+                    contrast = 0
                     inpuT = message.content.split()
                     i = inpuT.index("안돼")
                     i  = i - 3
                     blackword = inpuT[i]
-                    with open("/root/Bot/blacklist.txt", 'a') as blacklist:
-                        blacklist.write(blackword + "\n")
-                    await message.channel.send('알았어')
+                    blacklist = open ("/root/Bot/blacklist.txt", 'r')
+                    blackwords = blacklist.readlines()
+                    blacklist.close()
+                    for blackword_contrast in blackwords:
+                        blackword_contrast = blackword_contrast[:-1]
+                        if blackword == blackword_contrast:
+                            contrast = 1
+                    if contrast == 1:
+                        await message.channel.send('나도알아')
+                    else:
+                        with open("/root/Bot/blacklist.txt", 'a') as blacklist:
+                            blacklist.write(blackword + "\n")
+                        await message.channel.send('알았어')
                 else:
                     await message.channel.send('시룬데><')
 
