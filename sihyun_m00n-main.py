@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import discord
 import time
-import fileinput
-import sys
+import random
 
 client = discord.Client()
 
@@ -12,6 +11,15 @@ def replace_line(file_name, line_num, text):
     out = open(file_name, 'w')
     out.writelines(lines)
     out.close()
+
+def like(id_: str):
+    userlist = open("/root/Bot/userlist.txt", 'r')
+    user_infos = userlist.readlines()
+    for user_info in user_infos:
+        if str(id_) in user_info:
+            like_ = user_info.split()[1]
+            break
+    return like_
 
 @client.event
 async def on_ready():
@@ -98,7 +106,7 @@ async def on_message(message):
                     this_info = user_info
                     this_id = user_info.split()[0]
                     this_int = user_info.split()[1]
-                    edit_line = this_id + " " + str(int(this_int) + 1) + "\n"
+                    edit_line = this_id + " " + str(int(this_int) + random.randint(0,1)) + "\n"
                     replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
 
         if "라고 말해봐" in message.content:
@@ -203,7 +211,24 @@ async def on_message(message):
 
             if "드론" in message.content:
                 await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/dronefall.gif'))
-            
+            if "ㅇㅅㅇ" in message.content:
+                await message.channel.send('ㅇㅅㅇ')
+
+            if "호감도" in message.content:
+                try:
+                    mention = message.mentions
+                    mention = str(mention).split()
+                    word = mention[1]
+                    id_ = word[3:]
+                    if message.author.id == 536932662972252170:
+                        await message.channel.send(like(id_) + "쯤?")
+                    else :
+                        if int(like(message.author.id)) >= 20:
+                            await message.channel.send('안알려줄건데?')
+                        else:
+                            await message.channel.send('ㄲㅈ')
+                except:
+                    await message.channel.send('그런사람 모르는데?')
 
             if "더하기" in message.content:
                 try:
