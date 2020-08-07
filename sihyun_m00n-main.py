@@ -31,10 +31,10 @@ async def on_message(message):
         return
     if "wildcard" in str(message.mentions) or "sihyun_m00n" in str(message.mentions):
         await message.channel.send('왜')
+    if "ㅇㅅㅇ" in message.content:
+        await message.channel.send('ㅇㅅㅇ')
 
     if "시현아" in message.content:
-        white = 0
-        black = 0
         user_in_list = 0
         userlist = open("/root/Bot/userlist.txt", 'r')
         user_infos = userlist.readlines()
@@ -53,10 +53,13 @@ async def on_message(message):
         blackwords = blacklist.readlines()
         blacklist.close()
         for blackword in blackwords:
+            black = 0
             black_out = 0
             black_st = 0
             black_st2 = 0
             blackword = blackword[:-1]
+            if blackword == "":
+                return
             for blackchar in blackword:
                 if blackchar in message.content[4:]:
                     black_st2 = message.content[4:].index(blackchar)
@@ -70,12 +73,15 @@ async def on_message(message):
         whitewords = whitelist.readlines()
         whitelist.close()
         for whiteword in whitewords:
+            white = 0
             white_out = 0
             white_st = 0
             white_st2 = 0
             whiteword = whiteword[:-1]
+            if whiteword == "":
+                return
             for whitechar in whiteword:
-                if blackchar in message.content[4:]:
+                if whitechar in message.content[4:]:
                     white_st2 = message.content[4:].index(whitechar)
                     if white_st <= white_st2:
                         white_st = white_st2
@@ -93,7 +99,7 @@ async def on_message(message):
                     this_info = user_info
                     this_id = user_info.split()[0]
                     this_int = user_info.split()[1]
-                    edit_line = this_id + " " + str(int(this_int) - 10) + "\n"
+                    edit_line = this_id + " " + str(int(this_int) - random.randint(3,5)) + "\n"
                     replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
         
         elif white == 1:
@@ -120,7 +126,7 @@ async def on_message(message):
             for message__ in inpuT[st:i]:
                 message_ = message_ + message__ + " "
 
-            blacklist = open("/root/Bot/blacklist.txt", 'r')
+            blacklist = open("/root/Bot/dont_speak.txt", 'r')
             blackwords = blacklist.readlines()
             blacklist.close()
             for blackword in blackwords:
@@ -154,7 +160,54 @@ async def on_message(message):
                     i = inpuT.index("안돼")
                     i  = i - 3
                     blackword = inpuT[i]
-                    blacklist = open ("/root/Bot/blacklist.txt", 'r')
+                    blacklist = open("/root/Bot/dont_speak.txt", 'r')
+                    blackwords = blacklist.readlines()
+                    blacklist.close()
+                    for blackword_contrast in blackwords:
+                        blackword_contrast = blackword_contrast[:-1]
+                        if blackword == blackword_contrast:
+                            contrast = 1
+                    if contrast == 1:
+                        await message.channel.send('나도알아')
+                    else:
+                        with open("/root/Bot/dont_speak.txt", 'a') as blacklist:
+                            blacklist.write(blackword + "\n")
+                        await message.channel.send('알았어')
+                else:
+                    await message.channel.send('시룬데><')
+
+            
+            if "은 좋은말이야"  in message.content or "는 좋은말이야" in message.content:
+                if message.author.id == 536932662972252170:
+                    contrast = 0
+                    inpuT = message.content.split()
+                    i = inpuT.index("좋은말이야")
+                    i = i - 2
+                    whiteword == inpuT[i]
+                    whitelist = open("/root/Bot/whitelist.txt", 'r')
+                    whitewords = whitelist.readlines()
+                    whitelist.close()
+                    for whiteword_contrast in whitewords:
+                        whiteword_contrast = whiteword_contrast[:-1]
+                        if whiteword == whiteword_contrast:
+                            contrast = 1
+                    if contrast == 1:
+                        await message.channel.send('나도알아')
+                    else:
+                        with open("/root/Bot/whitelist.txt", 'a') as whitelist:
+                            whitelist.write(whiteword + "\n")
+                        await message.channel.send('알았어')
+                else:
+                    await message.channel.send('시룬데><')
+
+            if "은 나쁜말이야" in message.content or "는 나쁜말이야" in message.content:
+                if message.author.id == 536932662972252170:
+                    contrast = 0
+                    inpuT = message.content.split()
+                    i = inpuT.index("나쁜말이야")
+                    i  = i - 2
+                    blackword = inpuT[i]
+                    blacklist = open("/root/Bot/blacklist.txt", 'r')
                     blackwords = blacklist.readlines()
                     blacklist.close()
                     for blackword_contrast in blackwords:
@@ -171,6 +224,8 @@ async def on_message(message):
                     await message.channel.send('시룬데><')
 
 
+
+
             if "안녕" in message.content or "하이" in message.content:
                 await message.channel.send('안녕?')
         
@@ -182,7 +237,6 @@ async def on_message(message):
                         await message.channel.send('잘지낸다니 다행이네')
                     else:
                         await message.channel.send('어디가?')
-     
 
             if "심심" in message.content:
                 if "?" in message.content:
@@ -211,24 +265,36 @@ async def on_message(message):
 
             if "드론" in message.content:
                 await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/dronefall.gif'))
-            if "ㅇㅅㅇ" in message.content:
-                await message.channel.send('ㅇㅅㅇ')
 
             if "호감도" in message.content:
                 try:
-                    mention = message.mentions
-                    mention = str(mention).split()
-                    word = mention[1]
-                    id_ = word[3:]
-                    if message.author.id == 536932662972252170:
-                        await message.channel.send(like(id_) + "쯤?")
-                    else :
-                        if int(like(message.author.id)) >= 20:
-                            await message.channel.send('안알려줄건데?')
-                        else:
-                            await message.channel.send('ㄲㅈ')
+                    if "내" in message.content:
+                        await message.channel.send(like(message.author.id) + "쯤?")
+                    else:
+                        mention = message.mentions
+                        mention = str(mention).split()
+                        word = mention[1]
+                        id_ = word[3:]
+                        if message.author.id == 536932662972252170:
+                            await message.channel.send(like(id_) + "쯤?")
+                        else :
+                            if int(like(message.author.id)) >= 20:
+                                await message.channel.send('안알려줄건데?')
+                            else:
+                                await message.channel.send('ㄲㅈ')
                 except:
                     await message.channel.send('그런사람 모르는데?')
+            
+            if "뭐해" in message.content:
+                if int(like(message.author.id)) >= 100:
+                    await message.channel.send('니생각')
+                elif int(like(message.author.id)) >= 50:
+                    await message.channel.send('"당신과함께"하는중,엌ㅋㅋㅋ')
+                elif int(like(message.author.id)) >= 20:
+                    await message.channel.send('그냥? 암것도')
+                else:
+                    await message.channel.send('알아서 뭐하게;')
+
 
             if "더하기" in message.content:
                 try:
