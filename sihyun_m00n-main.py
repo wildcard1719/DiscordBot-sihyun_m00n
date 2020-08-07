@@ -35,6 +35,9 @@ async def on_message(message):
         await message.channel.send('ㅇㅅㅇ')
 
     if "시현아" in message.content:
+        black = 0
+        white = 0
+
         user_in_list = 0
         userlist = open("/root/Bot/userlist.txt", 'r')
         user_infos = userlist.readlines()
@@ -47,11 +50,10 @@ async def on_message(message):
             with open("/root/Bot/userlist.txt", 'a') as userlist:
                 userlist.write(str(message.author.id) + " 50\n")
         
-        blacklist = open("/root/Bot/blacklist.txt", 'r')
+        blacklist = open("/root/Bot/blackword.txt", 'r')
         blackwords = blacklist.readlines()
         blacklist.close()
         for blackword in blackwords:
-            black = 0
             black_out = 0
             black_st = 0
             black_st2 = 0
@@ -67,11 +69,10 @@ async def on_message(message):
             if black_out == len(blackword):
                 black = 1
 
-        whitelist = open("/root/Bot/whitelist.txt", 'r')
+        whitelist = open("/root/Bot/whiteword.txt", 'r')
         whitewords = whitelist.readlines()
         whitelist.close()
         for whiteword in whitewords:
-            white = 0
             white_out = 0
             white_st = 0
             white_st2 = 0
@@ -86,32 +87,23 @@ async def on_message(message):
                         white_out += 1
             if white_out == len(whiteword):
                 white = 1
-            
-        if black == 1:
-            userlist = open("/root/Bot/userlist.txt", 'r')
-            user_infos = userlist.readlines()
-            userlist.close()
-            for user_info in user_infos:
-                user_info = user_info[:-1]
-                if str(message.author.id) in user_info:
-                    this_info = user_info
-                    this_id = user_info.split()[0]
-                    this_int = user_info.split()[1]
-                    edit_line = this_id + " " + str(int(this_int) - random.randint(3,5)) + "\n"
-                    replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
         
-        elif white == 1:
-            userlist = open("/root/Bot/userlist.txt", 'r')
-            user_infos = userlist.readlines()
-            userlist.close()
-            for user_info in user_infos:
-                user_info = user_info[:-1]
-                if str(message.author.id) in user_info:
-                    this_info = user_info
-                    this_id = user_info.split()[0]
-                    this_int = user_info.split()[1]
-                    edit_line = this_id + " " + str(int(this_int) + random.randint(0,1)) + "\n"
-                    replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
+        userlist = open("/root/Bot/userlist.txt", 'r')
+        user_infos = userlist.readlines()
+        userlist.close()
+        for user_info in user_infos:
+            user_info = user_info[:-1]
+            if str(message.author.id) in user_info:
+                this_info = user_info
+                this_id = user_info.split()[0]
+                this_int = user_info.split()[1]
+                if black == 1:
+                    edit_line = this_id + " " + str(int(this_int) - random.randint(1, 3)) + "\n"
+                elif white == 1:
+                    edit_line = this_id + " " + str(int(this_int) + random.randint(1, 3)) + "\n"
+                else:
+                    edit_line = this_id + " " + this_int + "\n"
+                replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
 
         if "라고 말해봐" in message.content:
             black = 0
@@ -182,7 +174,7 @@ async def on_message(message):
                     i  = i - 1
                     whiteword = inpuT[i]
                     whiteword = whiteword[:-1]
-                    whitelist = open("/root/Bot/whitelist.txt", 'r')
+                    whitelist = open("/root/Bot/whiteword.txt", 'r')
                     whitewords = whitelist.readlines()
                     whitelist.close()
                     for whiteword_contrast in whitewords:
@@ -192,7 +184,7 @@ async def on_message(message):
                     if contrast == 1:
                         await message.channel.send('나도알아')
                     else:
-                        with open("/root/Bot/whitelist.txt", 'a') as whitelist:
+                        with open("/root/Bot/whiteword.txt", 'a') as whitelist:
                             whitelist.write(whiteword + "\n")
                         await message.channel.send('알았어')
                 else:
@@ -208,7 +200,7 @@ async def on_message(message):
                     i  = i - 1
                     blackword = inpuT[i]
                     blackword = blackword[:-1]
-                    blacklist = open("/root/Bot/blacklist.txt", 'r')
+                    blacklist = open("/root/Bot/blackword.txt", 'r')
                     blackwords = blacklist.readlines()
                     blacklist.close()
                     for blackword_contrast in blackwords:
@@ -218,7 +210,7 @@ async def on_message(message):
                     if contrast == 1:
                         await message.channel.send('나도알아')
                     else:
-                        with open("/root/Bot/blacklist.txt", 'a') as blacklist:
+                        with open("/root/Bot/blackword.txt", 'a') as blacklist:
                             blacklist.write(blackword + "\n")
                         await message.channel.send('알았어')
                 else:
@@ -295,7 +287,9 @@ async def on_message(message):
                     await message.channel.send('그냥? 암것도')
                 else:
                     await message.channel.send('알아서 뭐하게;')
-
+            
+            if "지건" in message.content:
+                await message.channel.send('딱대^^ㅣ바')
 
             if "더하기" in message.content:
                 try:
