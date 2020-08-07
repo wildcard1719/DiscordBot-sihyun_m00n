@@ -43,9 +43,7 @@ async def on_message(message):
             user_info = user_info[:-1]
             if str(message.author.id) in user_info:
                 user_in_list = 1
-        if user_in_list == 1:
-            pass
-        else:                
+        if user_in_list == 0:                
             with open("/root/Bot/userlist.txt", 'a') as userlist:
                 userlist.write(str(message.author.id) + " 50\n")
         
@@ -59,7 +57,7 @@ async def on_message(message):
             black_st2 = 0
             blackword = blackword[:-1]
             if blackword == "":
-                return
+                continue
             for blackchar in blackword:
                 if blackchar in message.content[4:]:
                     black_st2 = message.content[4:].index(blackchar)
@@ -79,7 +77,7 @@ async def on_message(message):
             white_st2 = 0
             whiteword = whiteword[:-1]
             if whiteword == "":
-                return
+                continue
             for whitechar in whiteword:
                 if whitechar in message.content[4:]:
                     white_st2 = message.content[4:].index(whitechar)
@@ -176,14 +174,14 @@ async def on_message(message):
                 else:
                     await message.channel.send('시룬데><')
 
-            
-            if "은 좋은말이야"  in message.content or "는 좋은말이야" in message.content:
+            if "은 좋은말이야" in message.content or "는 좋은말이야" in message.content:
                 if message.author.id == 536932662972252170:
                     contrast = 0
                     inpuT = message.content.split()
                     i = inpuT.index("좋은말이야")
-                    i = i - 2
-                    whiteword == inpuT[i]
+                    i  = i - 1
+                    whiteword = inpuT[i]
+                    whiteword = whiteword[:-1]
                     whitelist = open("/root/Bot/whitelist.txt", 'r')
                     whitewords = whitelist.readlines()
                     whitelist.close()
@@ -199,14 +197,17 @@ async def on_message(message):
                         await message.channel.send('알았어')
                 else:
                     await message.channel.send('시룬데><')
+            
+
 
             if "은 나쁜말이야" in message.content or "는 나쁜말이야" in message.content:
                 if message.author.id == 536932662972252170:
                     contrast = 0
                     inpuT = message.content.split()
                     i = inpuT.index("나쁜말이야")
-                    i  = i - 2
+                    i  = i - 1
                     blackword = inpuT[i]
+                    blackword = blackword[:-1]
                     blacklist = open("/root/Bot/blacklist.txt", 'r')
                     blackwords = blacklist.readlines()
                     blacklist.close()
