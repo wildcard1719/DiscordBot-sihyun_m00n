@@ -190,7 +190,7 @@ async def on_message(message):
                             contrast = 1
                     if contrast == 1:
                         await message.channel.send('나도알아')
-                    elif blackword != "시현아" and blackword != "":
+                    elif whiteword != "시현아" and whiteword != "":
                         with open("/root/Bot/whiteword.txt", 'a') as whitelist:
                             whitelist.write(whiteword + "\n")
                         await message.channel.send('알았어')
