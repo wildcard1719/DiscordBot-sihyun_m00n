@@ -99,8 +99,10 @@ async def on_message(message):
                 this_int = user_info.split()[1]
                 if black == 1:
                     edit_line = this_id + " " + str(int(this_int) - random.randint(1, 3)) + "\n"
+                    await message.channel.send(':(')
                 elif white == 1:
                     edit_line = this_id + " " + str(int(this_int) + random.randint(1, 3)) + "\n"
+                    await message.send(':)')
                 else:
                     edit_line = this_id + " " + this_int + "\n"
                 replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
@@ -240,7 +242,7 @@ async def on_message(message):
             if "불 좀 꺼줄래" in message.content:
                 await message.channel.send('니 삼성램이잖아')
 
-            if "인성문제" in message.content:
+            if "인성문제" in message.content or "인성 문제" in message.content:
                 await message.channel.send('아..아닙니다!')
         
             if "자기소개" in message.content:
@@ -271,7 +273,7 @@ async def on_message(message):
                         if message.author.id == 536932662972252170:
                             await message.channel.send(like(id_) + "쯤?")
                         else :
-                            if int(like(message.author.id)) >= 20:
+                            if int(like(message.author.id)) >= 21:
                                 await message.channel.send('안알려줄건데?')
                             else:
                                 await message.channel.send('ㄲㅈ')
@@ -343,7 +345,10 @@ async def on_message(message):
                 except:
                     await message.channel.send('뭐라는겨')
 
-
+            if "도와줘" in message.content or "help" in message.content:
+                string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n시현아 안녕: 시현이가 인사합니다.\n시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n시현아 몇시야?: 몇시인지 알려줍니다.\n시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다."
+                await message.channel.send(string)
+                
 
 
 with open("/root/Bot/sihyun_m00n-Token.txt", 'r') as token:
