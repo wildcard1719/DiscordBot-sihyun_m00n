@@ -139,7 +139,10 @@ async def on_message(message):
 
 
             if black == 0:
-                await message.channel.send(message_)
+                try:
+                    await message.channel.send(message_)
+                except:
+                    await message.channel.send('뭐라는겨')
             else:
                 await message.channel.send('ㅇㅇㄴㅇ')
                 black = 0
@@ -161,10 +164,12 @@ async def on_message(message):
                             contrast = 1
                     if contrast == 1:
                         await message.channel.send('나도알아')
-                    else:
+                    elif blackword != "시현아" and blackword != "":
                         with open("/root/Bot/dont_speak.txt", 'a') as blacklist:
                             blacklist.write(blackword + "\n")
                         await message.channel.send('알았어')
+                    else:
+                        await message.channel.send('뭐라는겨')
                 else:
                     await message.channel.send('시룬데><')
 
