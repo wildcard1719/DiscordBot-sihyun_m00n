@@ -222,7 +222,8 @@ async def on_message(message):
                         with open("/root/Bot/blackword.txt", 'a') as blacklist:
                             blacklist.write(blackword + "\n")
                         await message.channel.send('알았어')
-                    else await message.channel.send('뭐라는겨')
+                    else:
+                        await message.channel.send('뭐라는겨')
                 else:
                     await message.channel.send('시룬데><')
 
