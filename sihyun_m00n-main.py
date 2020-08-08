@@ -102,7 +102,7 @@ async def on_message(message):
                     await message.channel.send(':(')
                 elif white == 1:
                     edit_line = this_id + " " + str(int(this_int) + random.randint(1, 3)) + "\n"
-                    await message.send(':)')
+                    await message.channel.send(':)')
                 else:
                     edit_line = this_id + " " + this_int + "\n"
                 replace_line("/root/Bot/userlist.txt", user_infos.index(this_info + "\n"), edit_line)
