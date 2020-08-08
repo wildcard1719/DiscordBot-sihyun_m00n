@@ -190,10 +190,12 @@ async def on_message(message):
                             contrast = 1
                     if contrast == 1:
                         await message.channel.send('나도알아')
-                    else:
+                    elif blackword != "시현아" and blackword != "":
                         with open("/root/Bot/whiteword.txt", 'a') as whitelist:
                             whitelist.write(whiteword + "\n")
                         await message.channel.send('알았어')
+                    else:
+                        await message.channel.send('뭐라는겨')
                 else:
                     await message.channel.send('시룬데><')
             
@@ -216,10 +218,11 @@ async def on_message(message):
                             contrast = 1
                     if contrast == 1:
                         await message.channel.send('나도알아')
-                    else:
+                    elif blackword != "시현아" and blackword != "":
                         with open("/root/Bot/blackword.txt", 'a') as blacklist:
                             blacklist.write(blackword + "\n")
                         await message.channel.send('알았어')
+                    else await message.channel.send('뭐라는겨')
                 else:
                     await message.channel.send('시룬데><')
 
