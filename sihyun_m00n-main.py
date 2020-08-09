@@ -311,7 +311,7 @@ async def on_message(message):
                     await message.channel.send('그런사람 모르는데?')
             
             if "뭐해" in message.content:
-                if do == ""
+                if do == "":
                     if int(like(message.author.id)) >= 100:
                         await message.channel.send('니생각')
                     elif int(like(message.author.id)) >= 50:
