@@ -6,6 +6,7 @@ import random
 client = discord.Client()
 
 nds = 0
+do = ""
 
 def replace_line(file_name, line_num, text):
     lines = open(file_name,'r').readlines()
@@ -30,7 +31,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global nds
-
+    global do
     if message.author.bot:
         return
     if "wildcard" in str(message.mentions) or "sihyun_m00n" in str(message.mentions):
