@@ -326,18 +326,21 @@ async def on_message(message):
                     
             elif "해" in message.content:
                 if message.author.id == 536932662972252170:
-                    do = ""
-                    inpuT = message.content.split()
-                    end = inpuT.index("해")
-                    start = inpuT.index("시현아")
-                    start += 1
-                    inpuT = inpuT[start:end]
-                    for i in inpuT:
-                        do = do + i + " "
-                    if do == "":
+                    try:
+                        do = ""
+                        inpuT = message.content.split()
+                        end = inpuT.index("해")
+                        start = inpuT.index("시현아")
+                        start += 1
+                        inpuT = inpuT[start:end]
+                        for i in inpuT:
+                            do = do + i + " "
+                        if do == "":
+                            await message.channel.send('뭐라는겨')
+                        else:
+                            await client.change_presence(activity = discord.Game(do))
+                    except:
                         await message.channel.send('뭐라는겨')
-                    else:
-                        await client.change_presence(activity = discord.Game(do))
                 else:
                     await message.chennal.send('시룬데><')
 
