@@ -27,7 +27,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author.bot:
         return
     if "wildcard" in str(message.mentions) or "sihyun_m00n" in str(message.mentions):
         await message.channel.send('왜')
@@ -141,6 +141,7 @@ async def on_message(message):
             if black == 0:
                 try:
                     await message.channel.send(message_)
+                    await message.delete()
                 except:
                     await message.channel.send('뭐라는겨')
             else:
