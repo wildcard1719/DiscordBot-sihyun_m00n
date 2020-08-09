@@ -246,7 +246,6 @@ async def on_message(message):
             if "ㄴㄷㅆ" in message.content:
                 nds = 1
                 await message.channel.send('ㄴㄷㅆ??(각성)')
-                print(nds)
             if "미안해" in message.content or "진정해" in message.content:
                 nds = 0
                 await message.channel.send('알았어...(진정)')
@@ -320,7 +319,24 @@ async def on_message(message):
                     await message.channel.send('그냥? 암것도')
                 else:
                     await message.channel.send('알아서 뭐하게;')
-            
+                    
+            elif "해" in message.content:
+                if message.author.id == 536932662972252170:
+                    do = ""
+                    inpuT = message.content.split()
+                    end = inpuT.index("해")
+                    start = inpuT.index("시현아")
+                    start += 1
+                    inpuT = inpuT[start:end]
+                    for i in inpuT:
+                        do = do + i + " "
+                    if do == "":
+                        await message.channel.send('뭐라는겨')
+                    else:
+                        await client.change_presence(activity = discord.Game(do))
+                else:
+                    await message.chennal.send('시룬데><')
+
             if "지건" in message.content:
                 await message.channel.send('딱대^^ㅣ바')
 
@@ -377,7 +393,7 @@ async def on_message(message):
                     await message.channel.send('뭐라는겨')
 
             if "도와줘" in message.content or "help" in message.content:
-                string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n시현아 안녕: 시현이가 인사합니다.\n시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n시현아 몇시야?: 몇시인지 알려줍니다.\n시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다."
+                string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n시현아 안녕: 시현이가 인사합니다.\n시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n시현아 몇시야?: 몇시인지 알려줍니다.\n시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n시현아ㄴㄷㅆ:각성합니다.(하지마세요)\n시현아미안해:각성이풀립니다."
                 await message.channel.send(string)
                 
 
