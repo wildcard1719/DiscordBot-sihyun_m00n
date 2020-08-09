@@ -311,14 +311,17 @@ async def on_message(message):
                     await message.channel.send('그런사람 모르는데?')
             
             if "뭐해" in message.content:
-                if int(like(message.author.id)) >= 100:
-                    await message.channel.send('니생각')
-                elif int(like(message.author.id)) >= 50:
-                    await message.channel.send('"당신과함께"하는중,엌ㅋㅋㅋ')
-                elif int(like(message.author.id)) >= 20:
-                    await message.channel.send('그냥? 암것도')
+                if do == ""
+                    if int(like(message.author.id)) >= 100:
+                        await message.channel.send('니생각')
+                    elif int(like(message.author.id)) >= 50:
+                        await message.channel.send('"당신과함께"하는중,엌ㅋㅋㅋ')
+                    elif int(like(message.author.id)) >= 20:
+                        await message.channel.send('그냥? 암것도')
+                    else:
+                        await message.channel.send('알아서 뭐하게;')
                 else:
-                    await message.channel.send('알아서 뭐하게;')
+                    await message.channel.send(do + '하는중')
                     
             elif "해" in message.content:
                 if message.author.id == 536932662972252170:
