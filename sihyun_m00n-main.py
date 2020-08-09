@@ -5,6 +5,8 @@ import random
 
 client = discord.Client()
 
+nds = 0
+
 def replace_line(file_name, line_num, text):
     lines = open(file_name,'r').readlines()
     lines[line_num] = text
@@ -27,6 +29,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    global nds
+
     if message.author.bot:
         return
     if "wildcard" in str(message.mentions) or "sihyun_m00n" in str(message.mentions):
@@ -34,6 +38,17 @@ async def on_message(message):
     if "ㅇㅅㅇ" in message.content:
         await message.channel.send('ㅇㅅㅇ')
 
+
+    if nds == 1:
+        if "오" in message.content:
+            await message.channel.send('오..오노데라? 오노데라아아아아아')
+            await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/onodera.jpg'))
+        if "니" in message.content:
+            await message.channel.send('니코니코니이이')
+            await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/nico.gif'))
+        if "폭" in message.content:
+            await message.channel.send('익스플로져어어언')
+            await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/explosion.gif'))
     if "시현아" in message.content:
         black = 0
         white = 0
@@ -228,7 +243,13 @@ async def on_message(message):
                 else:
                     await message.channel.send('시룬데><')
 
-
+            if "ㄴㄷㅆ" in message.content:
+                nds = 1
+                await message.channel.send('ㄴㄷㅆ??(각성)')
+                print(nds)
+            if "미안해" in message.content or "진정해" in message.content:
+                nds = 0
+                await message.channel.send('알았어...(진정)')
 
 
             if "안녕" in message.content or "하이" in message.content:
