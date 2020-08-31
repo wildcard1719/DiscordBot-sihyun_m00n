@@ -34,10 +34,23 @@ async def on_message(message):
     global do
     if message.author.bot:
         return
-    if "wildcard" in str(message.mentions) or "sihyun_m00n" in str(message.mentions):
-        await message.channel.send('왜')
-    if "ㅇㅅㅇ" in message.content:
-        await message.channel.send('ㅇㅅㅇ')
+
+
+    wordlist = open("/root/Bot/talk.txt", 'r')
+    words = wordlist.readlines()
+    wordlist.close()
+    for word in words:
+        word_split = word.split('%')
+        input_word = word_split[0]
+        output_word = word_split[1]
+        output_file = word_split[2]
+        if str(input_word) in message.content:
+            if output_file == "f\n":
+                await message.channel.send(file=discord.File(output_word))
+            else:
+                await message.channel.send(output_word)
+ 
+    
 
 
     if nds == 1:
@@ -50,10 +63,10 @@ async def on_message(message):
         if "폭" in message.content:
             await message.channel.send('익스플로져어어언')
             await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/explosion.gif'))
+    
     if "시현아" in message.content:
         black = 0
         white = 0
-
         user_in_list = 0
         userlist = open("/root/Bot/userlist.txt", 'r')
         user_infos = userlist.readlines()
@@ -163,7 +176,24 @@ async def on_message(message):
             else:
                 await message.channel.send('ㅇㅇㄴㅇ')
                 black = 0
-        else:    
+        else:
+            wordlist = open("/root/Bot/prefix_talk.txt", 'r')
+            words = wordlist.readlines()
+            wordlist.close()
+            for word in words:
+                word_split = word.split('%')
+                input_word = word_split[0]
+                output_word = word_split[1]
+                output_file = word_split[2]
+                if str(input_word) in message.content:
+                    if output_file == "f\n":
+                        await message.channel.send(file=discord.File(output_word))
+                    else:
+                        await message.channel.send(output_word)
+
+            if "wildcard" in str(message.mentions) or "sihyun_m00n" in str(message.mentions):
+                await message.channel.send('왜')
+                
 
             if "라고 말하면 안돼" in message.content or "라고 하면 안돼" in message.content:
                 if message.author.id == 536932662972252170:
@@ -172,7 +202,7 @@ async def on_message(message):
                     i = inpuT.index("안돼")
                     i  = i - 3
                     blackword = inpuT[i]
-                    blacklist = open("/root/Bot/dont_speak.txt", 'r')
+                    blacklist = open('/root/Bot/dont_speak.txt', 'r')
                     blackwords = blacklist.readlines()
                     blacklist.close()
                     for blackword_contrast in blackwords:
@@ -247,50 +277,10 @@ async def on_message(message):
             if "ㄴㄷㅆ" in message.content:
                 nds = 1
                 await message.channel.send('ㄴㄷㅆ??(각성)')
-            if "미안해" in message.content or "진정해" in message.content:
+            if "미안해" in message.content or "진정" in message.content:
                 nds = 0
                 await message.channel.send('알았어...(진정)')
 
-
-            if "안녕" in message.content or "하이" in message.content:
-                await message.channel.send('안녕?')
-        
-            if "잘지내" in message.content or "잘있어" in message.content:
-                if '?' in message.content:
-                    await message.channel.send('나야 잘지내지')
-                else:
-                    if "난" in message.content or "나" in message.content:
-                        await message.channel.send('잘지낸다니 다행이네')
-                    else:
-                        await message.channel.send('어디가?')
-
-            if "심심" in message.content:
-                if "?" in message.content:
-                    await message.channel.send('딱히? ')
-                else:
-                    await message.channel.send('아르마해,아르마')
-
-            if "불 좀 꺼줄래" in message.content:
-                await message.channel.send('니 삼성램이잖아')
-
-            if "인성문제" in message.content or "인성 문제" in message.content:
-                await message.channel.send('아..아닙니다!')
-        
-            if "자기소개" in message.content:
-                if "지마" in message.content:
-                    await message.channel.send('할껀데?')
-                    time.sleep(1)
-                await message.channel.send('이름:문시현\n나이:17세\n키:170cm \n몸무게:62kg\n좋아하는것:오코노미야끼,전기전자,컴퓨터,코딩,드론,DIY등등\n싫어하는것:큰거미,안큰거미')
-        
-            if "몇시" in message.content:
-                now = time.localtime(time.time())
-                hour = now.tm_hour
-                if hour >= 13:
-                    hour -= 12
-                await message.channel.send(str(hour) + "시" + str(now.tm_min) + "분이야")
-
-            if "드론" in message.content:
-                await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/dronefall.gif'))
 
             if "호감도" in message.content:
                 try:
@@ -339,13 +329,11 @@ async def on_message(message):
                             await message.channel.send('뭐라는겨')
                         else:
                             await client.change_presence(activity = discord.Game(do))
+                            await message.channel.send('알았어')
                     except:
                         await message.channel.send('뭐라는겨')
                 else:
-                    await message.chennal.send('시룬데><')
-
-            if "지건" in message.content:
-                await message.channel.send('딱대^^ㅣ바')
+                    await message.channel.send('시룬데><')
 
             if "더하기" in message.content:
                 try:
