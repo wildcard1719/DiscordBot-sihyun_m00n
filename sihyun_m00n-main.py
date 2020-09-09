@@ -7,6 +7,8 @@ client = discord.Client()
 
 nds = 0
 do = ""
+common_sense_count = 0
+sense_arr = []
 
 def replace_line(file_name, line_num, text):
     lines = open(file_name,'r').readlines()
@@ -32,6 +34,8 @@ async def on_ready():
 async def on_message(message):
     global nds
     global do
+    global common_sense_count
+    global sense_arr
     if message.author.bot:
         return
 
@@ -49,9 +53,23 @@ async def on_message(message):
                 await message.channel.send(file=discord.File(output_word))
             else:
                 await message.channel.send(output_word)
- 
-    
 
+    common_sense_count += 1
+    if common_sense_count >= 500 or ("시현아" in message.content and "상식" in message.content):
+        common_sense_count = 0
+        with open("/root/Bot/common_sense.txt", 'r') as common_sense:
+            senses = common_sense.readlines()
+            sense_num = random.randrange(len(senses))
+            while sense_num in sense_arr:
+                if len(sense_arr) == len(senses):
+                    sense_arr = []
+                    break
+                sense_num = random.randrange(len(senses))
+                if sense_num not in sense_arr:
+                    break
+        sense_arr.append(sense_num)
+        sense = "그거알아?\n" + senses[sense_num]
+        await message.channel.send(sense)
 
     if nds == 1:
         if "오" in message.content:
@@ -92,7 +110,7 @@ async def on_message(message):
             for blackchar in blackword:
                 if blackchar in message.content[4:]:
                     black_st2 = message.content[4:].index(blackchar)
-                    if black_st <= black_st2:
+                    if black_st <= black_st2 and int(black_st2 - black_st) <= 5:
                         black_st = black_st2
                         black_out += 1
             if black_out == len(blackword):
@@ -111,7 +129,7 @@ async def on_message(message):
             for whitechar in whiteword:
                 if whitechar in message.content[4:]:
                     white_st2 = message.content[4:].index(whitechar)
-                    if white_st <= white_st2:
+                    if white_st <= white_st2 and int(white_st2 - white_st) <= 3:
                         white_st = white_st2
                         white_out += 1
             if white_out == len(whiteword):
@@ -159,7 +177,7 @@ async def on_message(message):
                 for blackchar in blackword:
                     if blackchar in message_:
                         black_st2 = message_.index(blackchar)
-                        if black_st <= black_st2:
+                        if black_st <= black_st2 and int(black_st2 - black_st) <= 5:
                             black_st = black_st2
                             black_out += 1
                 
