@@ -416,10 +416,19 @@ async def on_message(message):
 
             if "불" in message.content:
                 if "켜" in message.content:
-                    light = "1"
-                if "꺼" in message.content:
-                    light = "0"
+                    if message.author.id == 536932662972252170:
+                        light = "1"
+                        await message.channel.send('알았어')
+                    else:
+                        await message.channel.send('시룬데><')
+                elif "꺼" in message.content:
+                    if message.author.id == 536932662972252170:
+                        light = "0"
+                        await message.channel.send('알았어')
+                    else:
+                        await message.channel.send('시룬데><')
                 ser.write(light.encode())
+                light = ""
 
 with open("/root/Bot/sihyun_m00n-Token.txt", 'r') as token:
     client.run(token.read())
