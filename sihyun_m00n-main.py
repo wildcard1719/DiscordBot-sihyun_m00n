@@ -2,6 +2,9 @@
 import discord
 import time
 import random
+import serial
+
+ser = serial.Serial('/dev/ttyS0', 9600)
 
 client = discord.Client()
 
@@ -9,6 +12,7 @@ nds = 0
 do = ""
 common_sense_count = 0
 sense_arr = []
+light = ""
 
 def replace_line(file_name, line_num, text):
     lines = open(file_name,'r').readlines()
@@ -36,6 +40,7 @@ async def on_message(message):
     global do
     global common_sense_count
     global sense_arr
+    global light
     if message.author.bot:
         return
 
@@ -406,10 +411,15 @@ async def on_message(message):
                     await message.channel.send('뭐라는겨')
 
             if "도와줘" in message.content or "help" in message.content:
-                string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n시현아 안녕: 시현이가 인사합니다.\n시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n시현아 몇시야?: 몇시인지 알려줍니다.\n시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n시현아ㄴㄷㅆ:각성합니다.(하지마세요)\n시현아미안해:각성이풀립니다."
+                string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n시현아 안녕: 시현이가 인사합니다.\n시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n시현아ㄴㄷㅆ:각성합니다.(하지마세요)\n시현아미안해:각성이풀립니다."
                 await message.channel.send(string)
-                
 
+            if "불" in message.content:
+                if "켜" in message.content:
+                    light = "1"
+                if "꺼" in message.content:
+                    light = "0"
+                ser.write(light.encode())
 
 with open("/root/Bot/sihyun_m00n-Token.txt", 'r') as token:
     client.run(token.read())
