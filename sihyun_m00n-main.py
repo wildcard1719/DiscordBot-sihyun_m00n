@@ -60,7 +60,7 @@ async def on_message(message):
                 await message.channel.send(output_word)
 
     common_sense_count += 1
-    if common_sense_count >= 500 or ("시현아" in message.content and "상식" in message.content):
+    if common_sense_count >= 10000 or ("시현아" in message.content and "상식" in message.content):
         common_sense_count = 0
         with open("/root/Bot/common_sense.txt", 'r') as common_sense:
             senses = common_sense.readlines()
@@ -77,15 +77,7 @@ async def on_message(message):
         await message.channel.send(sense)
 
     if nds == 1:
-        if "오" in message.content:
-            await message.channel.send('오..오노데라? 오노데라아아아아아')
-            await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/onodera.jpg'))
-        if "니" in message.content:
-            await message.channel.send('니코니코니이이')
-            await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/nico.gif'))
-        if "폭" in message.content:
-            await message.channel.send('익스플로져어어언')
-            await message.channel.send(file=discord.File('/home/pi/DiscordBot-sihyun_m00n/pics/explosion.gif'))
+        
     
     if "시현아" in message.content:
         black = 0
