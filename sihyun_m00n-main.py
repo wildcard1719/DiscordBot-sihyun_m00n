@@ -75,8 +75,6 @@ async def on_message(message):
         sense_arr.append(sense_num)
         sense = "그거알아?\n" + senses[sense_num]
         await message.channel.send(sense)
-
-    if nds == 1:
         
     
     if "시현아" in message.content:
