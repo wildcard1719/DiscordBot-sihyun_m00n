@@ -2,9 +2,6 @@
 import discord
 import time
 import random
-import serial
-
-ser = serial.Serial('/dev/ttyS0', 9600)
 
 client = discord.Client()
 
@@ -404,21 +401,6 @@ async def on_message(message):
                 string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n시현아 안녕: 시현이가 인사합니다.\n시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n시현아ㄴㄷㅆ:각성합니다.(하지마세요)\n시현아미안해:각성이풀립니다."
                 await message.channel.send(string)
 
-            if "불" in message.content:
-                if "켜" in message.content:
-                    if message.author.id == 536932662972252170:
-                        light = "1"
-                        await message.channel.send('알았어')
-                    else:
-                        await message.channel.send('시룬데><')
-                elif "꺼" in message.content:
-                    if message.author.id == 536932662972252170:
-                        light = "0"
-                        await message.channel.send('알았어')
-                    else:
-                        await message.channel.send('시룬데><')
-                ser.write(light.encode())
-                light = ""
 
 with open("/root/Bot/sihyun_m00n-Token.txt", 'r') as token:
     client.run(token.read())
