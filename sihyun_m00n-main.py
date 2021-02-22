@@ -10,6 +10,8 @@ do = ""
 common_sense_count = 0
 sense_arr = []
 light = ""
+admin = 0
+hea = 0
 
 def replace_line(file_name, line_num, text):
     lines = open(file_name,'r').readlines()
@@ -33,11 +35,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global nds
-    global do
-    global common_sense_count
-    global sense_arr
-    global light
+    global nds, do, common_sense_count, sense_arr, light, admin, hea
+
     if message.author.bot:
         return
 
@@ -57,7 +56,7 @@ async def on_message(message):
                 await message.channel.send(output_word)
 
     common_sense_count += 1
-    if common_sense_count >= 10000 or ("시현아" in message.content and "상식" in message.content):
+    if common_sense_count >= 5000 or ("시현아" in message.content and "상식" in message.content):
         common_sense_count = 0
         with open("/root/Bot/common_sense.txt", 'r') as common_sense:
             senses = common_sense.readlines()
@@ -75,6 +74,10 @@ async def on_message(message):
         
     
     if "시현아" in message.content:
+        if message.author.id == 536932662972252170:
+            admin = 1
+        else:
+            admin = 0
         black = 0
         white = 0
         user_in_list = 0
@@ -206,7 +209,7 @@ async def on_message(message):
                 
 
             if "라고 말하면 안돼" in message.content or "라고 하면 안돼" in message.content:
-                if message.author.id == 536932662972252170:
+                if amdin:
                     contrast = 0
                     inpuT = message.content.split()
                     i = inpuT.index("안돼")
@@ -231,7 +234,7 @@ async def on_message(message):
                     await message.channel.send('시룬데><')
 
             if "은 좋은말이야" in message.content or "는 좋은말이야" in message.content:
-                if message.author.id == 536932662972252170:
+                if admin:
                     contrast = 0
                     inpuT = message.content.split()
                     i = inpuT.index("좋은말이야")
@@ -259,7 +262,7 @@ async def on_message(message):
 
 
             if "은 나쁜말이야" in message.content or "는 나쁜말이야" in message.content:
-                if message.author.id == 536932662972252170:
+                if admin:
                     contrast = 0
                     inpuT = message.content.split()
                     i = inpuT.index("나쁜말이야")
@@ -284,14 +287,6 @@ async def on_message(message):
                 else:
                     await message.channel.send('시룬데><')
 
-            if "ㄴㄷㅆ" in message.content:
-                nds = 1
-                await message.channel.send('ㄴㄷㅆ??(각성)')
-            if "미안해" in message.content or "진정" in message.content:
-                nds = 0
-                await message.channel.send('알았어...(진정)')
-
-
             if "호감도" in message.content:
                 try:
                     if "내" in message.content:
@@ -301,13 +296,8 @@ async def on_message(message):
                         mention = str(mention).split()
                         word = mention[1]
                         id_ = word[3:]
-                        if message.author.id == 536932662972252170:
-                            await message.channel.send(like(id_) + "쯤?")
-                        else :
-                            if int(like(message.author.id)) >= 21:
-                                await message.channel.send('안알려줄건데?')
-                            else:
-                                await message.channel.send('ㄲㅈ')
+                        await message.channel.send(like(id_) + "쯤?")
+
                 except:
                     await message.channel.send('그런사람 모르는데?')
             
@@ -325,25 +315,31 @@ async def on_message(message):
                     await message.channel.send(do + '하는중')
                     
             elif "해" in message.content:
-                if message.author.id == 536932662972252170:
-                    try:
-                        do = ""
-                        inpuT = message.content.split()
-                        end = inpuT.index("해")
-                        start = inpuT.index("시현아")
-                        start += 1
-                        inpuT = inpuT[start:end]
-                        for i in inpuT:
-                            do = do + i + " "
-                        if do == "":
+                for word in message.content.split():
+                    if word == "해":
+                        hea = 1
+                    else:
+                        hea = 0
+                if hea == 1:
+                    if admin:
+                        try:
+                            do = ""
+                            inpuT = message.content.split()
+                            end = inpuT.index("해")
+                            start = inpuT.index("시현아")
+                            start += 1
+                            inpuT = inpuT[start:end]
+                            for i in inpuT:
+                                do = do + i + " "
+                            if do == "":
+                                await message.channel.send('뭐라는겨')
+                            else:
+                                await client.change_presence(activity = discord.Game(do))
+                                await message.channel.send('알았어')
+                        except:
                             await message.channel.send('뭐라는겨')
-                        else:
-                            await client.change_presence(activity = discord.Game(do))
-                            await message.channel.send('알았어')
-                    except:
-                        await message.channel.send('뭐라는겨')
-                else:
-                    await message.channel.send('시룬데><')
+                    else:
+                        await message.channel.send('시룬데><')
 
             if "더하기" in message.content:
                 try:
@@ -398,7 +394,14 @@ async def on_message(message):
                     await message.channel.send('뭐라는겨')
 
             if "도와줘" in message.content or "help" in message.content:
-                string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n시현아 안녕: 시현이가 인사합니다.\n시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n시현아ㄴㄷㅆ:각성합니다.(하지마세요)\n시현아미안해:각성이풀립니다."
+                string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n\
+                시현아 안녕: 시현이가 인사합니다.\n\
+                시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n\
+                시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n\
+                시현아 상식말해줘: 시현이가 상식을 말해줍니다\n\
+                 ---admin---\n\
+                시현아 ~ 라고 말하면 안돼: 금칙어설정\n\
+                시현아 ~은/는 나쁜말이야/좋은말이야:호감도 언어 설정\n"
                 await message.channel.send(string)
 
 
