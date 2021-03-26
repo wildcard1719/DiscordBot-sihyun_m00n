@@ -2,6 +2,10 @@
 import discord
 import time
 import random
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
 
 client = discord.Client()
 
@@ -209,7 +213,7 @@ async def on_message(message):
                 
 
             if "라고 말하면 안돼" in message.content or "라고 하면 안돼" in message.content:
-                if amdin:
+                if admin:
                     contrast = 0
                     inpuT = message.content.split()
                     i = inpuT.index("안돼")
@@ -392,16 +396,45 @@ async def on_message(message):
                     await message.channel.send(str(result))
                 except:
                     await message.channel.send('뭐라는겨')
+            
+            if "다음은" in message.content:
+                index_of_next = 0
+                x_train = []
+                inpuT = message.content.split()
+                for i in inpuT:
+                    if "다음은" in i:
+                        index_of_next = inpuT.index(i)
+                y_train = inpuT[index_of_next - 1].split(",")
+                y_train = list(map(int, y_train))
+                for i in range(len(y_train)):
+                    x_train.append(i)
+                pop = x_train[len(x_train)-1]
+                x_train = torch.FloatTensor(x_train)
+                y_train = torch.FloatTensor(y_train)
+                W = torch.zeros(1, requires_grad=True)
+                b = torch.zeros(1, requires_grad=True)
+                opt = optim.SGD([W, b], lr = 0.01)
+                for i in range(3000):
+                    hypo = x_train * W + b
+                    cost = torch.mean((hypo - y_train) ** 2)
+                    opt.zero_grad()
+                    cost.backward()
+                    opt.step()
+                number = ((pop + 1) * W + b).item()
+                word = str(number) + "쯤?"
+                await message.channel.send(word)
+                    
+
 
             if "도와줘" in message.content or "help" in message.content:
                 string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n\
-                시현아 안녕: 시현이가 인사합니다.\n\
-                시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n\
-                시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n\
-                시현아 상식말해줘: 시현이가 상식을 말해줍니다\n\
-                 ---admin---\n\
-                시현아 ~ 라고 말하면 안돼: 금칙어설정\n\
-                시현아 ~은/는 나쁜말이야/좋은말이야:호감도 언어 설정\n"
+시현아 안녕: 시현이가 인사합니다.\n\
+시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n\
+시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n\
+시현아 상식말해줘: 시현이가 상식을 말해줍니다\n\
+---admin---\n\
+시현아 ~ 라고 말하면 안돼: 금칙어설정\n\
+시현아 ~은/는 나쁜말이야/좋은말이야:호감도 언어 설정\n"
                 await message.channel.send(string)
 
 
