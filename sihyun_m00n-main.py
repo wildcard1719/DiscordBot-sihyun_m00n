@@ -6,8 +6,20 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import math
+import os
+import smtplib
+from email.mime.text import MIMEText
+import log
 
 client = discord.Client()
+
+s = smtplib.SMTP('smtp.gmail.com', 587)
+
+mail = "bravotars@gmail.com"
+
+with open("/root/Bot/mail_passwd.txt", 'r') as mailpasswd_:
+    mailpasswd = mailpasswd_.read()
 
 nds = 0
 do = ""
@@ -39,11 +51,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global nds, do, common_sense_count, sense_arr, light, admin, hea
+    global nds, do, common_sense_count, sense_arr, light, admin, hea, mail
 
     if message.author.bot:
         return
-
 
     wordlist = open("/root/Bot/talk.txt", 'r')
     words = wordlist.readlines()
@@ -78,6 +89,9 @@ async def on_message(message):
         
     
     if "시현아" in message.content:
+        author = '(' + message.author.name + ') '
+        log.logging("/root/Bot/sihyun_m00n-log.txt", str(author + message.content))
+        
         if message.author.id == 536932662972252170:
             admin = 1
         else:
@@ -401,30 +415,59 @@ async def on_message(message):
                 index_of_next = 0
                 x_train = []
                 inpuT = message.content.split()
-                for i in inpuT:
-                    if "다음은" in i:
-                        index_of_next = inpuT.index(i)
-                y_train = inpuT[index_of_next - 1].split(",")
-                y_train = list(map(int, y_train))
-                for i in range(len(y_train)):
-                    x_train.append(i)
-                pop = x_train[len(x_train)-1]
-                x_train = torch.FloatTensor(x_train)
-                y_train = torch.FloatTensor(y_train)
-                W = torch.zeros(1, requires_grad=True)
-                b = torch.zeros(1, requires_grad=True)
-                opt = optim.SGD([W, b], lr = 0.01)
-                for i in range(3000):
-                    hypo = x_train * W + b
-                    cost = torch.mean((hypo - y_train) ** 2)
-                    opt.zero_grad()
-                    cost.backward()
-                    opt.step()
-                number = ((pop + 1) * W + b).item()
-                word = str(number) + "쯤?"
-                await message.channel.send(word)
-                    
+                try:
+                    for i in inpuT:
+                        if "다음은" in i:
+                            index_of_next = inpuT.index(i)
+                    y_train = inpuT[index_of_next - 1].split(",")
+                    y_train = list(map(int, y_train))
+                    for i in range(len(y_train)):
+                        x_train.append(i)
+                    pop = x_train[len(x_train)-1]
+                    x_train = torch.FloatTensor(x_train)
+                    y_train = torch.FloatTensor(y_train)
+                    W = torch.zeros(1, requires_grad=True)
+                    b = torch.zeros(1, requires_grad=True)
+                    opt = optim.SGD([W, b], lr = 0.01)
+                    for i in range(3000):
+                        hypo = x_train * W + b
+                        cost = torch.mean((hypo - y_train) ** 2)
+                        opt.zero_grad()
+                        cost.backward()
+                        opt.step()
+                    number = math.floor(((pop + 1) * W + b).item())
+                    word = str(number) + "쯤?"
+                    await message.channel.send(word)
+                
+                except:
+                    pass
 
+            if "으로" in message.content and "제목으로" in message.content and "라고" in message.content and "보내줘" in message.content:
+                try:
+                    inpuT = message.content.split()
+                    mailaddr = inpuT[inpuT.index("으로")-1]
+                    banner = inpuT[inpuT.index("으로")+1:inpuT.index("제목으로")]
+                    body = inpuT[inpuT.index("제목으로")+1:inpuT.index("라고")]
+                    banner = " ".join(banner)
+                    body = " ".join(banner)
+                    msg = MIMEText(body)
+                    msg['Subject'] = banner
+                    s.connect('smtp.gmail.com', '587')
+                    s.ehlo()
+                    s.starttls()
+                    s.login(mail, mailpasswd)
+                    s.sendmail(mail, mailaddr, msg.as_string())
+                    await message.channel.send('보냈어')
+                    
+                except (IndexError, ValueError):
+                    await message.channel.send('뭐라는겨')
+                s.quit()
+            if "몇시" in message.content:
+                tm = time.localtime()
+                hour = tm.tm_hour
+                minute = tm.tm_min
+                sec = tm.tm_sec
+                await message.channel.send(str(hour) + '시' + str(minute) + '분' + str(sec) + '초야')
 
             if "도와줘" in message.content or "help" in message.content:
                 string = "시현아 ~ 라고 말해봐: 시현이가 말을합니다.\n\
@@ -432,6 +475,8 @@ async def on_message(message):
 시현아 내 호감도는?: 당신의 호감도를 알려줍니다.(시현이에게 욕을하면 호감도가 감소하고 좋은말을 해주면호감도가 증가합니다.)\n\
 시현아 ~ (더하기/뺴기/곱하기/나누기) ~ 은?:사칙연산을합니다.\n\
 시현아 상식말해줘: 시현이가 상식을 말해줍니다\n\
+시현아 ~,~,~,... 다음은?: 시현이가 다음숫자를 예상해봅니다.\n\
+시현아 ~ 으로 ~ 제목으로 ~ 라고 보내줘: 시현이가 이메일을 보냅니다.\n\
 ---admin---\n\
 시현아 ~ 라고 말하면 안돼: 금칙어설정\n\
 시현아 ~은/는 나쁜말이야/좋은말이야:호감도 언어 설정\n"
